@@ -1,0 +1,18 @@
+- Testar nova estrutura de pastas
+
+- Definir o tipo do resultado gerado por um algortimo (int, boolean, grafo)
+	. manual?
+	. automatico? (is_int, is_bool, is_obj -> soh pode ser grafo)
+
+- Quando resultado de um algoritmo for um ou mais grafos:
+	. Para cada grafo resultante:
+		. Criar um resource do tipo grafo
+		. Salvar o grafo, criando ID
+		. Insere ID em um vetor
+	. Resultado vetor de IDs
+
+- Criar estrutura para guardar marcacoes dentro de um grafo (campos 'livres' nos vertices e arestas?)
+
+- Fazer toda a parte de XML (xml2obj, obj2xml)
+
+- Implementar uma serie de algoritmos
