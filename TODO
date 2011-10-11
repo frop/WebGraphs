@@ -2,6 +2,10 @@
 
 - Definir o tipo do resultado gerado por um algortimo (int, boolean, grafo)
 	. manual?
+		. define(TYPE_INT, 0x001)
+		. define(TYPE_BOOL, 0x002)
+		. define(TYPE_GRAPH, 0x003)
+		. ...
 	. automatico? (is_int, is_bool, is_obj -> soh pode ser grafo)
 
 - Quando resultado de um algoritmo for um ou mais grafos:
