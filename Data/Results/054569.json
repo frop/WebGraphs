@@ -1,1 +1,0 @@
-{"parameters":{"param1":"parametroA","param2":"parametroB"},"graphs":[{"id":"G","tipo":"grafo","vertices":{"quantidade":3,"vertice":[{"id":"g1"},{"id":"g2"},{"id":"g3"}]},"arestas":{"quantidade":3,"aresta":[{"origem":"g1","destino":"g2","peso":0},{"origem":"g1","destino":"g3","peso":3},{"origem":"g2","destino":"g3","peso":-1}]}}],"result":true}
