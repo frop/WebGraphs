@@ -77,7 +77,7 @@ class Algorithm{
 	}
 	
 	private function result2xml(){
-		
+		fprintf($xmlFile, "%s\n", $xml);
 	}
 	
 	private function result2json(){

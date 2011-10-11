@@ -1,5 +1,5 @@
 <?php
-Class Example /* extends AlgorithmAbtract */{
+Class Example /* extends AlgorithmAbstract */{
 	/**
 	 * 
 	 * Enter description here ...
@@ -31,6 +31,7 @@ Class Example /* extends AlgorithmAbtract */{
 	
 	public function Run(){
 		$this->result = TRUE;
+		// $this->resultType = 'boolean' ?
 	}
 	
 	public function Info(){
