@@ -1,12 +1,21 @@
 - Testar nova estrutura de pastas
 
+- Definir melhor como o resultado eh passado da classe do algoritmo X para o sistema
+	. tipos possiveis:
+		. int (ex. grau maximo)
+		. bool (ex. eh completo, json->true/false xml->??)
+		. grafo (ex. gerar grafo completo)
+		. array (ex. vizinhos de um vertice, lista de arestas que sao pontes, vetor de graus, lista de vertices de um caminho) -> array de int, bool, grafo
+		. marcacao? (ex. coloracao) -> [x] gera outro grafo ou [ ] vetor associativo (um para arestas, outro para vertices)?
+		. ??
+
 - Definir o tipo do resultado gerado por um algortimo (int, boolean, grafo)
-	. manual?
+	. [x] manual?
 		. define(TYPE_INT, 0x001)
 		. define(TYPE_BOOL, 0x002)
 		. define(TYPE_GRAPH, 0x003)
 		. ...
-	. automatico? (is_int, is_bool, is_obj -> soh pode ser grafo)
+	. [ ] automatico? (is_int, is_bool, is_obj -> soh pode ser grafo)
 
 - Quando resultado de um algoritmo for um ou mais grafos:
 	. Para cada grafo resultante:
