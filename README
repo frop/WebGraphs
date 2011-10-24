@@ -1,12 +1,1 @@
-1- Criar conta no GitHub
-2- Baixar Git pra Windows
-3- cd para pasta www/
-4- Para baixar o projeto:
-	4a- git clone https://frop@github.com/frop/TG-II.git (primeira vez)
-	4b- git pull (atualiza os dados locais)
-5- a cada alteracao 'finalizada' em cada arquivo, ou a cada arquivo novo:
-	5a- git add <nomeArquivo>
-6- a cada alteracao significante no conjunto de arquivos necessarios (uma funcao nova, um fluxo novo, uma correcao, etc):
-	6a- git commit -m 'Descricao breve do que foi feito (aparece no github do lado de cada arquivo ou pasta modificado neste intervalo de tempo)'
-7- a cada conjunto relevante de alteracoes (manda tudo feito pro servidor):
-	7a- git push
+
