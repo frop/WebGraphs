@@ -64,21 +64,21 @@ class RestService{
 	
 	public function parseUrl(){
 //		$resourcePattern = '/server\/([a-z0-9.]+)\/?[0-9a-z.]*$/';
-		$resourcePattern = '/server\/([a-z0-9]+)[\.\/]/';
+		$resourcePattern = '/\/([a-z0-9]+)[\.\/]/';
 		preg_match($resourcePattern, $this->_url, $resMatches);
 
 		switch ($resMatches[1]){
 			case 'graph':
 				$this->_requestResource = 'Graph';
 				if ($this->_requestMethod == 'GET'){
-					$graphPattern = '/\/([0-9]+)\.(xml|json)$/';
+					$graphPattern = '/graph\/([0-9]+)\.(xml|json)$/';
 					preg_match($graphPattern, $this->_url, $graphMatches);
-					list($void, $this->$_graphId, $format) = $graphMatches;
-					
+					list(, $graphId, $format) = $graphMatches;
+					$this->_graphId = $graphId;
 				}elseif ($this->_requestMethod == 'POST'){
 					$graphPattern = '/\.(xml|json)$/';
 					preg_match($graphPattern, $this->_url, $graphMatches);
-					list($void, $format) = $graphMatches;
+					list(, $format) = $graphMatches;
 					
 					require 'Resources/Graph.php';
 					$graphResource = new Graph;
@@ -127,13 +127,13 @@ class RestService{
 			$this->_resObj = new $this->_requestResource($this->_input);
 			$this->_resObj->$methodToRun();
 			
-            return true;
-        } catch (Service_Exception_Abstract $e) {
-            die($e);
-        } catch (Exception $e) {
-            die('An Unexpected Error Has Occurred');
-        }
-        return false;
+		    return true;
+		} catch (Service_Exception_Abstract $e) {
+		    die($e);
+		} catch (Exception $e) {
+		    die('An Unexpected Error Has Occurred');
+		}
+			return false;
 	}
 	
 	public function Response(){

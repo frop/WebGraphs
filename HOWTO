@@ -1,0 +1,18 @@
+Enable apache mod-rewrite:
+$ a2enmod rewrite && sudo /etc/init.d/apache2 force-reload
+
+Let Public/ be the document root or
+Copy Public/index.php and Public/.htaccess to the document root or
+Point the document root to Public or
+Use a virtual host using Public/ directory
+NameVirtualHost *
+
+  <VirtualHost *>
+    ServerName localhost
+    DocumentRoot /var/www
+  </VirtualHost>
+
+  <VirtualHost *>
+    ServerName www.rig.com
+    DocumentRoot /var/www/rig/
+  </VirtualHost>
