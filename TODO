@@ -1,5 +1,7 @@
 - Testar nova estrutura de pastas
 
+- Usar arquivo de configuracao para setar Libray/ e Data/
+
 - Definir melhor como o resultado eh passado da classe do algoritmo X para o sistema
 	. tipos possiveis:
 		. int (ex. grau maximo)
