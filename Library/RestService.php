@@ -74,7 +74,9 @@ class RestService{
 					$graphPattern = '/graph\/([0-9]+)\.(xml|json)$/';
 					preg_match($graphPattern, $this->_url, $graphMatches);
 					list(, $graphId, $format) = $graphMatches;
-					$this->_graphId = $graphId;
+
+					$this->_input['format'] = $format;
+					$this->_input['id'] = $graphId;
 				}elseif ($this->_requestMethod == 'POST'){
 					$graphPattern = '/\.(xml|json)$/';
 					preg_match($graphPattern, $this->_url, $graphMatches);
@@ -85,7 +87,6 @@ class RestService{
 					$graphResource->create($_POST['graph'], $format);
 					exit;
 				}
-				echo 'GRAPH RESOURCE';
 				break;
 			case 'result':
 				echo 'RESULT RESOURCE';

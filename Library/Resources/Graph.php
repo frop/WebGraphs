@@ -1,13 +1,30 @@
 <?php
 
 class Graph{
+	private $_id;
+	private $_graph;
+	private $_format;
+
+	function __construct($params){
+		$this->_id = isset($params['id'])? $params['id'] : null;
+		$this->_graph = isset($params['graph'])? $params['graph'] : null;
+
+		$this->_format = $params['format'];
+
+	}
+
+	function Get(){
+		$graphFile = GRAPH_DATA_DIR.'/'.$this->_id.'.'.$this->_format;
+		$this->_graph = file_get_contents($graphFile);
+	}
+
 	/**
 	 * 
 	 * Cria um recurso do tipo 'graph'
 	 * @param $graph array contendo o grafo
 	 */
-	function Post($graph, $format){
-		switch($format){
+	function Post(){
+		switch($this->_format){
 			case 'xml':
 				break;
 			case 'json':
@@ -23,10 +40,8 @@ class Graph{
 		$graphJson = json_encode($graph);
 		fprintf($jsonFile, "%s\n", $graphJson);
 	}
-	
-	function Get($id, $format){
-		$graphFile = 'Data/Graphs/'.$id.'.'.$format;
-		
-		echo file_get_contents($graphFile);
+
+	function Response(){
+		echo $this->_graph;
 	}
 }
