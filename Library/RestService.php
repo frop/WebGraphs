@@ -87,9 +87,15 @@ class RestService{
 				}
 				break;
 			case 'result':
-				echo 'RESULT RESOURCE';
 				$this->_requestResource = 'Result';
-				$id = '';
+				if ($this->_requestMethod == 'GET'){
+					$resultPattern = '/result\/([0-9]+)\.(xml|json)$/';
+					preg_match($resultPattern, $this->_url, $resultMatches);
+					list(, $resultId, $format) = $resultMatches;
+
+					$this->_input['format'] = $format;
+					$this->_input['id'] = $resultId;
+				}
 				break;
 			default:
 				$this->_requestResource = 'Algorithm';
