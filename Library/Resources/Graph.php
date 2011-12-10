@@ -15,33 +15,33 @@ class Graph{
 
 	function Get(){
 		$graphFile = GRAPH_DATA_DIR.'/'.$this->_id.'.'.$this->_format;
-		$this->_graph = file_get_contents($graphFile);
+		$this->_response = file_get_contents($graphFile);
 	}
 
-	/**
-	 * 
-	 * Cria um recurso do tipo 'graph'
-	 * @param $graph array contendo o grafo
-	 */
 	function Post(){
+		do{
+			$graphId = sprintf("%06d", rand(1, 1000000));
+		}while(is_file(GRAPH_DATA_DIR.'/'.$graphId.'.json'));
+
 		switch($this->_format){
 			case 'xml':
 				break;
 			case 'json':
-				$graph = json_decode($graph, true);
+				$graph = json_decode($this->_graph, true);
 		}
-			
-		$graphId = sprintf("%06d", rand(1, 1000));
-		$jsonFile = fopen('Data/Graphs/'.$graphId.'.json', 'w');
+		
+		$jsonFile = fopen(GRAPH_DATA_DIR.'/'.$graphId.'.json', 'w');
 		if (!$jsonFile){
-			echo 'erro file';
-			exit;
+			$this->_response = "Error while opening graph file";
+			return;
 		}
 		$graphJson = json_encode($graph);
 		fprintf($jsonFile, "%s\n", $graphJson);
+
+		$this->_response = json_encode(array("graphId" => $graphId));
 	}
 
 	function Response(){
-		echo $this->_graph;
+		echo $this->_response;
 	}
 }

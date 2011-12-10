@@ -28,7 +28,6 @@ class RestService{
 		parse_str(file_get_contents('php://input'), $this->_arg['DELETE']);
 		
 		$this->parseUrl();
-		$this->parseInput();
 	}
 	
 	public function getUrl(){
@@ -77,15 +76,14 @@ class RestService{
 
 					$this->_input['format'] = $format;
 					$this->_input['id'] = $graphId;
+
 				}elseif ($this->_requestMethod == 'POST'){
 					$graphPattern = '/\.(xml|json)$/';
 					preg_match($graphPattern, $this->_url, $graphMatches);
 					list(, $format) = $graphMatches;
-					
-					require 'Resources/Graph.php';
-					$graphResource = new Graph;
-					$graphResource->create($_POST['graph'], $format);
-					exit;
+
+					$this->_input['format'] = $format;
+					$this->_input['graph'] = $this->_arg['POST']['graph'];
 				}
 				break;
 			case 'result':
@@ -99,23 +97,26 @@ class RestService{
 				$algPattern = '/\/([a-z0-9]+)\.(xml|json)/';
 				preg_match($algPattern, $this->_url, $algMatches);
 				
-				list($void, $this->_algorithm, $this->_format) = $algMatches;
-				list($void, $this->_input['algorithm'], $this->_input['format']) = $algMatches; 
+				list(, $this->_algorithm, $this->_format) = $algMatches;
+				list(, $this->_input['algorithm'], $this->_input['format']) = $algMatches; 
+				$this->parseInput();
 		}
 		
 	}
 
 	public function parseInput(){
 		$arg = $this->_arg[$this->_requestMethod];
-		
-		switch($this->_format){
-			case 'xml':
-				echo 'XML';
-				break;
-			case 'json':
-				$array = json_decode($arg['input'], true);
-				foreach ($array as $k => $v)
-					$this->_input[$k] = $v;
+
+		if (array_key_exists('input', $arg)){
+			switch($this->_format){
+				case 'xml':
+					echo 'XML';
+					break;
+				case 'json':
+					$array = json_decode($arg, true);
+					foreach ($array as $k => $v)
+						$this->_input[$k] = $v;
+			}
 		}
 	}
 	
@@ -123,7 +124,6 @@ class RestService{
 		require 'Resources/'.$this->_requestResource.'.php';
 
 		$methodToRun = ucfirst(strtolower($this->_requestMethod));
-//		print_r($methodToRun);exit;
 		try {
 			$this->_resObj = new $this->_requestResource($this->_input);
 			$this->_resObj->$methodToRun();
