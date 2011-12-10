@@ -10,7 +10,7 @@ define('DATA_DIR', '/home/felipe/TG-II/Data');
 define('GRAPH_DATA_DIR', DATA_DIR . DIRECTORY_SEPARATOR . 'Graphs');
 define('RESULT_DATA_DIR', DATA_DIR . DIRECTORY_SEPARATOR . 'Results');
 
-define('ALGORITHM_DIR', LIBRARY_DIR . DIRECTORY_SEPARATOR . 'Algorithm');
+define('ALGORITHM_DIR', LIBRARY_DIR . DIRECTORY_SEPARATOR . 'Algorithms');
 
 require 'RestService.php';
 require 'Grafo.php';

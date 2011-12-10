@@ -62,7 +62,6 @@ class RestService{
 	}
 	
 	public function parseUrl(){
-//		$resourcePattern = '/server\/([a-z0-9.]+)\/?[0-9a-z.]*$/';
 		$resourcePattern = '/\/([a-z0-9]+)[\.\/]/';
 		preg_match($resourcePattern, $this->_url, $resMatches);
 
@@ -99,15 +98,29 @@ class RestService{
 				break;
 			default:
 				$this->_requestResource = 'Algorithm';
+				if ($this->_requestMethod == 'POST'){
+					$algPattern = '/\/([a-z0-9]+)\.(xml|json)/';
+					preg_match($algPattern, $this->_url, $algMatches);
 				
-				$algPattern = '/\/([a-z0-9]+)\.(xml|json)/';
-				preg_match($algPattern, $this->_url, $algMatches);
-				
-				list(, $this->_algorithm, $this->_format) = $algMatches;
-				list(, $this->_input['algorithm'], $this->_input['format']) = $algMatches; 
-				$this->parseInput();
+					list(, $this->_algorithm, $this->_format) = $algMatches;
+					list(, $this->_input['algorithm'], $this->_input['format']) = $algMatches; 
+
+					$this->_getList('graph');
+					$this->_getList('param');
+				}
 		}
 		
+	}
+
+	private function _getList($listName){
+		if (isset($this->_arg['POST'][$listName])){
+			$list = $this->_arg['POST'][$listName];
+			if (!is_array($list))
+				$list = array($listName => $list);
+		}else
+			$list = '';
+
+		$this->_input[$listName] = $list;
 	}
 
 	public function parseInput(){
