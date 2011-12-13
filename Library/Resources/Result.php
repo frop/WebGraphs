@@ -19,6 +19,6 @@ class Result{
 	}
 
 	function Response(){
-		echo $this->_response;
+		return $this->_response;
 	}
 }

@@ -6,8 +6,7 @@ class Example extends AlgorithmBase{
 	}
 	
 	public function Run(){
-		$this->setResult(TRUE);
-		// $this->resultType = 'boolean' ?
+		$this->setResult(TRUE, 'boolean'); // transformar em constante
 	}
 	
 	public function Info(){

@@ -127,7 +127,7 @@ class RestService{
 		$arg = $this->_arg[$this->_requestMethod];
 
 		if (array_key_exists('input', $arg)){
-			switch($this->_format){
+			switch($this->_input['format']){
 				case 'xml':
 					echo 'XML';
 					break;
@@ -155,9 +155,28 @@ class RestService{
 		}
 			return false;
 	}
+
+	private function _responseHeader(){
+		switch($this->_input['format']){
+			case 'xml':
+				echo 'XML';
+				break;
+			case 'json':
+				header('Content-type: application/json');
+		}
+	}
 	
-	public function Response(){
-		$this->_resObj->Response();
+	public function SendResponse($debug = FALSE){
+		$response = rtrim($this->_resObj->Response());
+
+		if ($debug){
+			header('Content-type: text/html');
+			echo "<script>console.log($response)</script>";
+		} else {
+			$this->_responseHeader();
+			echo $response;
+		}
+		
 	}
 
 }

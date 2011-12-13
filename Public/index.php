@@ -19,4 +19,4 @@ $servico = new RestService();
 
 $servico->handle();
 
-echo $servico->response();
+$servico->SendResponse();

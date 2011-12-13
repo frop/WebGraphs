@@ -42,6 +42,6 @@ class Graph{
 	}
 
 	function Response(){
-		echo $this->_response;
+		return $this->_response;
 	}
 }

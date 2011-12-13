@@ -56,7 +56,7 @@ class Algorithm{
 			case 'xml':
 				break;
 			case 'json':
-				echo json_encode($response);
+				return json_encode($response);
 		}
 	}
 

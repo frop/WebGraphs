@@ -25,11 +25,13 @@ class AlgorithmBase{
 		return $this->description;
 	}
 
-	public function setResult($result){
+	public function setResult($result, $type){
 		$this->result = $result;
+		$this->resultType = $type;
 	}
 
 	public function getResult(){
+//		if ($this->resultType == '')
 		return $this->result;
 	}
 }
