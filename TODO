@@ -29,7 +29,10 @@
 - Implementar uma serie de algoritmos
 
 ESCREVER
--introducao:
+-motivacao
+
+
+introducao:
 	-webservices (necessidade, conceito, maneiras)
 	      - destacar SOAP e REST. Comparar os dois e explicar pq o REST foi escolhido
 
@@ -38,7 +41,8 @@ ESCREVER
 	-o formato JSON (comparar com XML)
 
 	-front controller design pattern
-
+-
+-definicao de grafo (E,V)
 -trabalho em si:
      - ideia geral
      - .htaccess
