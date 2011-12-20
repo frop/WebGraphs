@@ -17,6 +17,8 @@ class RestService{
 	
 	private $_format;
 	
+	private $_error = false;
+	
 	public function __construct(){
 		$this->_url = $_SERVER['REQUEST_URI'];
 		$this->_requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
@@ -63,37 +65,53 @@ class RestService{
 	
 	public function parseUrl(){
 		$resourcePattern = '/\/([a-z0-9]+)[\.\/]/';
-		preg_match($resourcePattern, $this->_url, $resMatches);
+		if (!preg_match($resourcePattern, $this->_url, $resMatches)){
+			$this->_error = 'You must especify a resource.';
+			return false;
+		}
 
 		switch ($resMatches[1]){
 			case 'graph':
 				$this->_requestResource = 'Graph';
 				if ($this->_requestMethod == 'GET'){
 					$graphPattern = '/graph\/([0-9]+)\.(xml|json)$/';
-					preg_match($graphPattern, $this->_url, $graphMatches);
-					list(, $graphId, $format) = $graphMatches;
+					if(preg_match($graphPattern, $this->_url, $graphMatches)){
+						list(, $graphId, $format) = $graphMatches;
 
-					$this->_input['format'] = $format;
-					$this->_input['id'] = $graphId;
+						$this->_input['format'] = $format;
+						$this->_input['id'] = $graphId;
+					}else{
+						$this->_error = 'Impossible to determine graph or format requested.';
+					}
 
 				}elseif ($this->_requestMethod == 'POST'){
 					$graphPattern = '/\.(xml|json)$/';
-					preg_match($graphPattern, $this->_url, $graphMatches);
-					list(, $format) = $graphMatches;
+					if(preg_match($graphPattern, $this->_url, $graphMatches)){
+						list(, $format) = $graphMatches;
 
-					$this->_input['format'] = $format;
-					$this->_input['graph'] = $this->_arg['POST']['graph'];
+						$this->_input['format'] = $format;
+						$this->_input['graph'] = $this->_arg['POST']['graph'];
+					}else{
+						$this->_error = 'Impossible to determine format requested.';
+					}
+				}else{
+					$this->_error = 'Invalid request for GRAPH resource.';
 				}
 				break;
 			case 'result':
 				$this->_requestResource = 'Result';
 				if ($this->_requestMethod == 'GET'){
 					$resultPattern = '/result\/([0-9]+)\.(xml|json)$/';
-					preg_match($resultPattern, $this->_url, $resultMatches);
-					list(, $resultId, $format) = $resultMatches;
+					if(preg_match($resultPattern, $this->_url, $resultMatches)){
+						list(, $resultId, $format) = $resultMatches;
 
-					$this->_input['format'] = $format;
-					$this->_input['id'] = $resultId;
+						$this->_input['format'] = $format;
+						$this->_input['id'] = $resultId;
+					}else{
+						$this->_error = 'Impossible to determine result or format requested.';
+					}
+				}else{
+					$this->_error = 'Invalid request for RESULT resource.';
 				}
 				break;
 			default:
@@ -101,12 +119,17 @@ class RestService{
 				if ($this->_requestMethod == 'POST'){
 					$algPattern = '/\/([a-z0-9]+)\.(xml|json)/';
 					preg_match($algPattern, $this->_url, $algMatches);
-				
-					list(, $this->_algorithm, $this->_format) = $algMatches;
-					list(, $this->_input['algorithm'], $this->_input['format']) = $algMatches; 
+					if (count($algMatches) == 3){
+						list(, $this->_algorithm, $this->_format) = $algMatches;
+						list(, $this->_input['algorithm'], $this->_input['format']) = $algMatches; 
 
-					$this->_getList('graph');
-					$this->_getList('param');
+						$this->_getList('graph');
+						$this->_getList('param');
+					}else{
+						$this->_error = 'Impossible to determine algorithm or format requested.';
+					}
+				}else{
+					$this->_error = 'Invalid request for ALGORITHM resource.';
 				}
 		}
 		
@@ -140,20 +163,26 @@ class RestService{
 	}
 	
 	public function handle(){
-		require 'Resources/'.$this->_requestResource.'.php';
-
-		$methodToRun = ucfirst(strtolower($this->_requestMethod));
-		try {
-			$this->_resObj = new $this->_requestResource($this->_input);
-			$this->_resObj->$methodToRun();
+		if ($this->_error === false){
+			if (!is_file(LIBRARY_DIR.'/Resources/'.$this->_requestResource.'.php')){
+				$this->_error = $this->_requestResource.' algorithm was not found in the server.';
+				return false;
+			}
 			
-		    return true;
-		} catch (Service_Exception_Abstract $e) {
-		    die($e);
-		} catch (Exception $e) {
-		    die('An Unexpected Error Has Occurred');
+			require 'Resources/'.$this->_requestResource.'.php';
+
+			$methodToRun = ucfirst(strtolower($this->_requestMethod));
+			try {
+				$this->_resObj = new $this->_requestResource($this->_input);
+				$this->_resObj->$methodToRun();
+			
+				return true;
+			} catch (Service_Exception_Abstract $e) {
+				$this->_error = $e;
+			} catch (Exception $e) {
+				$this->_error = 'An unexpected error has occurred';
+			}
 		}
-			return false;
 	}
 
 	private function _responseHeader(){
@@ -167,7 +196,10 @@ class RestService{
 	}
 	
 	public function SendResponse($debug = FALSE){
-		$response = rtrim($this->_resObj->Response());
+		if ($this->_error === false)
+			$response = rtrim($this->_resObj->Response());
+		else
+			$response = '{"error":"'.$this->_error.'"}';
 
 		if ($debug){
 			header('Content-type: text/html');
@@ -176,7 +208,6 @@ class RestService{
 			$this->_responseHeader();
 			echo $response;
 		}
-		
 	}
 
 }

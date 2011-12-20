@@ -15,7 +15,10 @@ class Graph{
 
 	function Get(){
 		$graphFile = GRAPH_DATA_DIR.'/'.$this->_id.'.'.$this->_format;
-		$this->_response = file_get_contents($graphFile);
+		if (is_file($graphFile))
+			$this->_response = file_get_contents($graphFile);
+		else
+			$this->_response = '{"error": "Graph not found."}';
 	}
 
 	function Post(){
