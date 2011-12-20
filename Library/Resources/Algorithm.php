@@ -1,4 +1,15 @@
 <?php
+
+/*
+duas listas:
+graph = lista de grafos.. ex:
+	graph['base'] = 149112
+	graph['destino'] = 2013491
+param = lista de parametros.. ex:
+	param['grau'] = 2
+	param['pintar'] = false
+*/
+
 class Algorithm{
 	private $_format;
 	private $_algorithm;
@@ -8,12 +19,13 @@ class Algorithm{
 	private $_resultId;
 //	private $_graphsData;
 
+	private $_result = array();
+
 	function __construct($data){
-		
 		$this->setFormat($data['format']);
 		$this->setAlgorithm($data['algorithm']);
-		$this->setGraphsId($data['graphIds']);
-		$this->setParams($data['parameters']);
+		$this->setGraphsId($data['graph']);
+		$this->setParams($data['param']);
 		
 	}
 
@@ -22,7 +34,8 @@ class Algorithm{
 	}
 	
 	function Post(){
-		require ALGORITHM_DIR . DIRECTORY_SEPARATOR . $this->_algorithm . ".php";
+		require ALGORITHM_DIR.'/'.'AlgorithmBase'.'.php';
+		require ALGORITHM_DIR.'/'.ucfirst($this->_algorithm).'.php';
 		$graphsData = array();
 
 		foreach($this->_graphsId as $gId){
@@ -30,15 +43,14 @@ class Algorithm{
 		}
 		
 		$this->_algObject = new $this->_algorithm;
-		$this->_algObject->setParams($this->_params);
-		$this->_algObject->setGraphs($graphsData);
+
 		$this->_algObject->Run();
 		
 		$this->_saveResult();
 	}
 	
 	function Response(){
-		$response = array('resultId' => $this->_resultId);
+		$response = array('resultId' => $this->_result['id']);
 		
 		switch ($this->_format){
 			case 'xml':
@@ -70,8 +82,14 @@ class Algorithm{
 	}
 	
 	private function _saveResult(){
-		$this->_resultId = sprintf("%06d", rand(1,999999));
-		$this->_algObject->setGraphs($this->_graphsId);
+		$this->createResultId();
+		$this->_result['algorithm']['name'] = $this->_algorithm;
+		$this->_result['algorithm']['description'] = $this->_algObject->getDescription();
+		$this->_result['graph'] = $this->_graphsId;
+		$this->_result['parameter'] = $this->_params;
+		$this->_result['result'] = $this->_algObject->getResult();
+		
+		
 //		$this->result2xml();
 		$this->result2json();
 	}
@@ -81,9 +99,16 @@ class Algorithm{
 	}
 	
 	private function result2json(){
-		$jsonFile = fopen(RESULT_DATA_DIR . DIRECTORY_SEPARATOR . $this->_resultId . ".json", "w");
-		$json = json_encode($this->_algObject);
+		$jsonFile = fopen(RESULT_DATA_DIR .'/'. $this->_result['id'] . ".json", "w");
+		$json = json_encode($this->_result);
 		
 		fprintf($jsonFile, "%s\n", $json);
+	}
+
+	private function createResultId(){
+		do{
+			$resultId = sprintf("%06d", rand(1, 1000000));
+		}while(is_file(RESULT_DATA_DIR.'/'.$resultId.'.json'));
+		$this->_result['id'] = $resultId;
 	}
 }

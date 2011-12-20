@@ -1,4 +1,4 @@
-- Testar nova estrutura de pastas
+- Usar arquivo de configuracao para setar Libray/ e Data/
 
 - Definir melhor como o resultado eh passado da classe do algoritmo X para o sistema
 	. tipos possiveis:
@@ -10,12 +10,10 @@
 		. ??
 
 - Definir o tipo do resultado gerado por um algortimo (int, boolean, grafo)
-	. [x] manual?
-		. define(TYPE_INT, 0x001)
-		. define(TYPE_BOOL, 0x002)
-		. define(TYPE_GRAPH, 0x003)
-		. ...
-	. [ ] automatico? (is_int, is_bool, is_obj -> soh pode ser grafo)
+	. define(TYPE_INT, 0x001)
+	. define(TYPE_BOOL, 0x002)
+	. define(TYPE_GRAPH, 0x003)
+	. ...
 
 - Quando resultado de um algoritmo for um ou mais grafos:
 	. Para cada grafo resultante:
@@ -29,3 +27,28 @@
 - Fazer toda a parte de XML (xml2obj, obj2xml)
 
 - Implementar uma serie de algoritmos
+
+ESCREVER
+-introducao:
+	-webservices (necessidade, conceito, maneiras)
+	      - destacar SOAP e REST. Comparar os dois e explicar pq o REST foi escolhido
+
+	-explicar REST
+
+	-o formato JSON (comparar com XML)
+
+	-front controller design pattern
+
+-trabalho em si:
+     - ideia geral
+     - .htaccess
+     - classe de Grafo e JSON correspondente
+     - recursos (nomes, funcoes, URIs - cada post e get)
+     - fluxogramas gerais
+     - diagrama de classes (?)
+     - estrutura de pastas
+     - como adicionar algoritmos
+     - exemplos de clientes
+           - diferentes linguagens: html (fomulario), python, linha de comando (cURL)
+     - expansoes: autenticação, usar XML também, repositório de algoritmos, página de especificações de cada algoritmo (tipo um man)
+

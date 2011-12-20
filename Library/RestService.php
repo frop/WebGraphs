@@ -28,7 +28,6 @@ class RestService{
 		parse_str(file_get_contents('php://input'), $this->_arg['DELETE']);
 		
 		$this->parseUrl();
-		$this->parseInput();
 	}
 	
 	public function getUrl(){
@@ -63,58 +62,80 @@ class RestService{
 	}
 	
 	public function parseUrl(){
-//		$resourcePattern = '/server\/([a-z0-9.]+)\/?[0-9a-z.]*$/';
-		$resourcePattern = '/server\/([a-z0-9]+)[\.\/]/';
+		$resourcePattern = '/\/([a-z0-9]+)[\.\/]/';
 		preg_match($resourcePattern, $this->_url, $resMatches);
 
 		switch ($resMatches[1]){
 			case 'graph':
 				$this->_requestResource = 'Graph';
 				if ($this->_requestMethod == 'GET'){
-					$graphPattern = '/\/([0-9]+)\.(xml|json)$/';
+					$graphPattern = '/graph\/([0-9]+)\.(xml|json)$/';
 					preg_match($graphPattern, $this->_url, $graphMatches);
-					list($void, $this->$_graphId, $format) = $graphMatches;
-					
+					list(, $graphId, $format) = $graphMatches;
+
+					$this->_input['format'] = $format;
+					$this->_input['id'] = $graphId;
+
 				}elseif ($this->_requestMethod == 'POST'){
 					$graphPattern = '/\.(xml|json)$/';
 					preg_match($graphPattern, $this->_url, $graphMatches);
-					list($void, $format) = $graphMatches;
-					
-					require 'Resources/Graph.php';
-					$graphResource = new Graph;
-					$graphResource->create($_POST['graph'], $format);
-					exit;
+					list(, $format) = $graphMatches;
+
+					$this->_input['format'] = $format;
+					$this->_input['graph'] = $this->_arg['POST']['graph'];
 				}
-				echo 'GRAPH RESOURCE';
 				break;
 			case 'result':
-				echo 'RESULT RESOURCE';
 				$this->_requestResource = 'Result';
-				$id = '';
+				if ($this->_requestMethod == 'GET'){
+					$resultPattern = '/result\/([0-9]+)\.(xml|json)$/';
+					preg_match($resultPattern, $this->_url, $resultMatches);
+					list(, $resultId, $format) = $resultMatches;
+
+					$this->_input['format'] = $format;
+					$this->_input['id'] = $resultId;
+				}
 				break;
 			default:
 				$this->_requestResource = 'Algorithm';
+				if ($this->_requestMethod == 'POST'){
+					$algPattern = '/\/([a-z0-9]+)\.(xml|json)/';
+					preg_match($algPattern, $this->_url, $algMatches);
 				
-				$algPattern = '/\/([a-z0-9]+)\.(xml|json)/';
-				preg_match($algPattern, $this->_url, $algMatches);
-				
-				list($void, $this->_algorithm, $this->_format) = $algMatches;
-				list($void, $this->_input['algorithm'], $this->_input['format']) = $algMatches; 
+					list(, $this->_algorithm, $this->_format) = $algMatches;
+					list(, $this->_input['algorithm'], $this->_input['format']) = $algMatches; 
+
+					$this->_getList('graph');
+					$this->_getList('param');
+				}
 		}
 		
 	}
 
+	private function _getList($listName){
+		if (isset($this->_arg['POST'][$listName])){
+			$list = $this->_arg['POST'][$listName];
+			if (!is_array($list))
+				$list = array($listName => $list);
+		}else
+			$list = '';
+
+		$this->_input[$listName] = $list;
+	}
+
 	public function parseInput(){
 		$arg = $this->_arg[$this->_requestMethod];
-		
-		switch($this->_format){
-			case 'xml':
-				echo 'XML';
-				break;
-			case 'json':
-				$array = json_decode($arg['input'], true);
-				foreach ($array as $k => $v)
-					$this->_input[$k] = $v;
+
+		if (array_key_exists('input', $arg)){
+			switch($this->_input['format']){
+				case 'xml':
+					echo 'XML';
+					break;
+				case 'json':
+					$array = json_decode($arg, true);
+					foreach ($array as $k => $v)
+						$this->_input[$k] = $v;
+			}
 		}
 	}
 	
@@ -122,22 +143,40 @@ class RestService{
 		require 'Resources/'.$this->_requestResource.'.php';
 
 		$methodToRun = ucfirst(strtolower($this->_requestMethod));
-//		print_r($methodToRun);exit;
 		try {
 			$this->_resObj = new $this->_requestResource($this->_input);
 			$this->_resObj->$methodToRun();
 			
-            return true;
-        } catch (Service_Exception_Abstract $e) {
-            die($e);
-        } catch (Exception $e) {
-            die('An Unexpected Error Has Occurred');
-        }
-        return false;
+		    return true;
+		} catch (Service_Exception_Abstract $e) {
+		    die($e);
+		} catch (Exception $e) {
+		    die('An Unexpected Error Has Occurred');
+		}
+			return false;
+	}
+
+	private function _responseHeader(){
+		switch($this->_input['format']){
+			case 'xml':
+				echo 'XML';
+				break;
+			case 'json':
+				header('Content-type: application/json');
+		}
 	}
 	
-	public function Response(){
-		$this->_resObj->Response();
+	public function SendResponse($debug = FALSE){
+		$response = rtrim($this->_resObj->Response());
+
+		if ($debug){
+			header('Content-type: text/html');
+			echo "<script>console.log($response)</script>";
+		} else {
+			$this->_responseHeader();
+			echo $response;
+		}
+		
 	}
 
 }
