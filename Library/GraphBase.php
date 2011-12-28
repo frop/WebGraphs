@@ -190,7 +190,7 @@ class GraphBase{
 
 		$jsonFile = fopen(GRAPH_DATA_DIR.'/'.$this->id.'.json', 'w');
 		if (!$jsonFile){
-			return -1;
+			return 0;
 		}
 		$graphJson = json_encode($this);
 		fprintf($jsonFile, "%s\n", $graphJson);
