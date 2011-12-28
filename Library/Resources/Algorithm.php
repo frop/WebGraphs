@@ -52,14 +52,7 @@ class Algorithm{
 	}
 	
 	function Response(){
-		$response = array('resultId' => $this->_result['id']);
-		
-		switch ($this->_format){
-			case 'xml':
-				break;
-			case 'json':
-				return json_encode($response);
-		}
+		return array('resultId' => $this->_result['id']);
 	}
 
 	function setFormat($f){

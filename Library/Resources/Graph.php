@@ -18,7 +18,7 @@ class Graph{
 		if (is_file($graphFile))
 			$this->_response = file_get_contents($graphFile);
 		else
-			$this->_response = '{"error": "Graph not found."}';
+			$this->_response = array("error" => "Graph not found.");
 	}
 
 	function Post(){
@@ -26,11 +26,11 @@ class Graph{
 
 		$graph = new GraphBase(json_decode($this->_graph, true));
 		if (!$graph->save()){
-			$this->_response = "Error while saving graph file";
+			$this->_response = array("error" => "Error while saving graph file.");
 			return;
 		}
 
-		$this->_response = json_encode(array("graphId" => $graph->getId()));
+		$this->_response = array("graphId" => $graph->getId());
 	}
 
 	function Response(){

@@ -184,28 +184,27 @@ class RestService{
 			}
 		}
 	}
-
-	private function _responseHeader(){
-		switch($this->_input['format']){
-			case 'xml':
-				echo 'XML';
-				break;
-			case 'json':
-				header('Content-type: application/json');
-		}
-	}
 	
 	public function SendResponse($debug = FALSE){
 		if ($this->_error === false)
-			$response = rtrim($this->_resObj->Response());
+			$response = $this->_resObj->Response();
 		else
-			$response = '{"error":"'.$this->_error.'"}';
+			$response = array("error" => $this->_error);
+
+		if (is_array($response)){ // ainda nao esta no formato que queremos
+			switch($this->_input['format']){
+				case 'xml':
+					echo 'XML';
+					break;
+				case 'json':
+					$response = json_encode($response);
+			}
+		}
 
 		if ($debug){
 			header('Content-type: text/html');
 			echo "<script>console.log($response)</script>";
 		} else {
-			$this->_responseHeader();
 			echo $response;
 		}
 	}

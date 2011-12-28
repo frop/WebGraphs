@@ -14,12 +14,12 @@ class Result{
 		if (is_file($resultFile))
 			$this->_response = file_get_contents($resultFile);
 		else{
-			$this->_response = '{"error": "Result not found."}';
+			$this->_response = array("error" => "Result not found.");
 		}
 	}
 
 	function Post(){
-		$this->_response = 'Invalid method';
+		$this->_response = array("error" => 'Invalid method.');
 	}
 
 	function Response(){
