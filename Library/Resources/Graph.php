@@ -22,26 +22,15 @@ class Graph{
 	}
 
 	function Post(){
-		do{
-			$graphId = sprintf("%06d", rand(1, 1000000));
-		}while(is_file(GRAPH_DATA_DIR.'/'.$graphId.'.json'));
+		require 'GraphBase.php';
 
-		switch($this->_format){
-			case 'xml':
-				break;
-			case 'json':
-				$graph = json_decode($this->_graph, true);
-		}
-		
-		$jsonFile = fopen(GRAPH_DATA_DIR.'/'.$graphId.'.json', 'w');
-		if (!$jsonFile){
-			$this->_response = "Error while opening graph file";
+		$graph = new GraphBase(json_decode($this->_graph, true));
+		if (!$graph->save()){
+			$this->_response = "Error while saving graph file";
 			return;
 		}
-		$graphJson = json_encode($graph);
-		fprintf($jsonFile, "%s\n", $graphJson);
 
-		$this->_response = json_encode(array("graphId" => $graphId));
+		$this->_response = json_encode(array("graphId" => $graph->getId()));
 	}
 
 	function Response(){

@@ -6,7 +6,7 @@ class Example extends AlgorithmBase{
 	}
 	
 	public function Run(){
-		$result = array('k' => 12, 'tree' => $treeId);
+		$result = array('k' => 12, 'tree' => $this->graph['graph']);
 		$this->setResult($result);
 	}
 	

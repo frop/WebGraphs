@@ -1,104 +1,161 @@
 <?php
 
 /**
- * 
- * "id":"123123",
- * "vertices":{
- *	"quantidade":3,
- *	"vertice":[
- *	{ "id":"g1" },
- *	{ "id":"g2" },
- *	{ "id":"g3" }
- *	]
- * },
- * "arestas":{
- *	"quantidade":3,
- *	"aresta":[
- *	{ "id": "a1", "origem":"g1", "destino":"g2", "peso":0 },
- *	{ "id": "a2", "origem":"g1", "destino":"g3", "peso":3 },
- *	{ "id": "a3", "origem":"g2", "destino":"g3", "peso":-1 }
- *	]
- * }
- * 
- */
-
-class Vertices{
-	public $quantidade;
-	public $vertice;
-	
-	public function __construct(){
-		$this->quantidade = 0;
-		$this->vertice = array();
-	}
-	
-	public function setVertices($listaVertices){
-		foreach($listaVertices as $vertices)
-			$this->criaVertice($vertices);
-	}
-	
-	public function criaVertice($vertice){
-		$this->quantidade++;
-		array_push($this->vertice, $vertice);
-	}
+{
+  "vertexes": {
+    "g1": {"color": "red"}, 
+    "g2": {"color": "blue"}, 
+    "g3": {"color": "green"}
+  },
+  "adjacency": {
+    "g1": {
+	"g2": {"weight": 0},
+	"g3": {"weight": 0}
+    }, 
+    "g2": {
+	"g1": {"weight": 0},
+	"g3": {"weight": 0}
+    }, 
+    "g3": {
+	"g1": {"weight": 0}, 
+	"g2": {"weight": 0}
+    }
+  }
 }
 
-class Arestas{
-	public $quantidade;
-	public $aresta;
-	
-	public function __construct(){
-		$this->quantidade = 0;
-		$this->aresta = array();
-	}
-	
-	public function setArestas($listaArestas){
-		foreach($listaArestas as $aresta)
-			$this->criaAresta($aresta);
-	}
-	
-	public function criaAresta($aresta){
-		$this->quantidade++;
-		array_push($this->aresta, $aresta);
-	}
+{
+  "vertexes": ["g1", "g2", "g3"],
+  "adjacency": {
+    "g1": {
+	"g2": {"weight": 0},
+	"g3": {"weight": 0}
+    }, 
+    "g2": {
+	"g1": {"weight": 0},
+	"g3": {"weight": 0}
+    }, 
+    "g3": {
+	"g1": {"weight": 0}, 
+	"g2": {"weight": 0}
+    }
+  }
 }
+*/
 
-class Grafo{
+
+/*
+Array
+(
+    [id] => 123123
+    [vertexes] => Array
+        (
+            [g1] => Array
+                (
+                    [color] => red
+                )
+
+            [g2] => Array
+                (
+                    [color] => blue
+                )
+
+            [g3] => Array
+                (
+                    [color] => green
+                )
+
+        )
+
+    [adjacency] => Array
+        (
+            [g1] => Array
+                (
+                    [0] => g2
+                    [1] => g3
+                )
+
+            [g2] => Array
+                (
+                    [g1] => Array
+                        (
+                            [data] => Array
+                                (
+                                    [weight] => 0
+                                )
+
+                        )
+
+                    [g3] => Array
+                        (
+                            [data] => Array
+                                (
+                                    [weight] => 0
+                                )
+
+                        )
+
+                )
+
+            [g3] => Array
+                (
+                    [g1] => Array
+                        (
+                            [data] => Array
+                                (
+                                    [weight] => 0
+                                )
+
+                        )
+
+                    [g2] => Array
+                        (
+                            [data] => Array
+                                (
+                                    [weight] => 0
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+*/
+
+class GraphBase{
 	public $id;
-	public $vertices;
-	public $arestas;
+	public $vertexes;
+	public $adjacency;
 	
 	public function __construct($grafo = NULL){
 		if ($grafo && is_array($grafo)){
 			$this->loadFromArray($grafo);
 		}
 	}
-	
-	// THROW EXCEPTIONS
-	// PRECISA ID?
-	// PRECISA QUANTIDADE?
+
 	public function loadFromArray($array){
 		$this->id = $array['id'];
-		
-		$vertices = $array['vertices'];
-		// $vertices['quantidade'];
-		$this->setVertices($vertices['vertice']);
-		
-		$arestas = $array['arestas'];
-		// $arestas['quantidade'];
-		$this->setArestas($arestas['aresta']);
-	}
-	
-	public function setId($id){
-		$this->id = $id;
-	}
-	
-	public function setTipo($tipo){
-		$this->tipo = $tipo;
-	}
-	
-	public function setVertices($listaVertices){
-		$this->vertices = new Vertices;
-		$this->vertices->setVertices($listaVertices);
+
+		$vertexesList = $array['vertexes'];
+		foreach($vertexesList as $id => $data){
+			if (is_array($data)){
+				$this->vertexes[$id] = $data;
+			}else{
+				$this->vertexes[$id] = array("name" => $data);
+			}
+		}
+
+		$adjacencyList = $array['adjacency'];
+		foreach($adjacencyList as $vertFrom => $vertsTo){
+			foreach($vertsTo as $v => $data){
+				if (is_array($data)){
+					$this->adjacency[$vertFrom][$v] = $data;
+				}else{
+					$this->adjacency[$vertFrom][$data] = array("weight" => 0);
+				}
+			}
+		}
 	}
 	
 	public function getVertices(){
@@ -123,7 +180,7 @@ class Grafo{
 		if (!$jsonFile){
 			return -1;
 		}
-		$graphJson = json_encode($graph);
+		$graphJson = json_encode($this);
 		fprintf($jsonFile, "%s\n", $graphJson);
 
 		return $graphId;

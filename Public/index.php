@@ -13,7 +13,6 @@ define('RESULT_DATA_DIR', DATA_DIR . DIRECTORY_SEPARATOR . 'Results');
 define('ALGORITHM_DIR', LIBRARY_DIR . DIRECTORY_SEPARATOR . 'Algorithms');
 
 require 'RestService.php';
-require 'Grafo.php';
 
 $servico = new RestService();
 

@@ -17,7 +17,6 @@ class Algorithm{
 	private $_params;
 	private $_algObject;
 	private $_resultId;
-//	private $_graphsData;
 
 	private $_result = array();
 
@@ -26,7 +25,6 @@ class Algorithm{
 		$this->setAlgorithm($data['algorithm']);
 		$this->setGraphsId($data['graph']);
 		$this->setParams($data['param']);
-		
 	}
 
 	function Get(){
@@ -34,16 +32,20 @@ class Algorithm{
 	}
 	
 	function Post(){
+		require 'GraphBase.php';
 		require ALGORITHM_DIR.'/'.'AlgorithmBase'.'.php';
 		require ALGORITHM_DIR.'/'.ucfirst($this->_algorithm).'.php';
+
 		$graphsData = array();
 
-		foreach($this->_graphsId as $gId){
-			$graphsData[] = new Grafo(json_decode(file_get_contents(GRAPH_DATA_DIR . DIRECTORY_SEPARATOR . "$gId.json"), TRUE));
+		foreach($this->_graphsId as $key => $gId){
+			$graphsData[$key] = new GraphBase(json_decode(file_get_contents(GRAPH_DATA_DIR .'/'. "$gId.json"), TRUE));
 		}
 		
 		$this->_algObject = new $this->_algorithm;
 
+		$this->_algObject->setGraphsList($graphsData);
+		$this->_algObject->setParamsList($this->_params);
 		$this->_algObject->Run();
 		
 		$this->_saveResult();
