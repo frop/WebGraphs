@@ -6,7 +6,8 @@ class Example extends AlgorithmBase{
 	}
 	
 	public function Run(){
-		$this->setResult(TRUE, 'boolean'); // transformar em constante
+		$result = array('k' => 12, 'tree' => $treeId);
+		$this->setResult($result);
 	}
 	
 	public function Info(){

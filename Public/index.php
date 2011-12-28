@@ -19,4 +19,4 @@ $servico = new RestService();
 
 $servico->handle();
 
-$servico->SendResponse();
+$servico->SendResponse(TRUE);

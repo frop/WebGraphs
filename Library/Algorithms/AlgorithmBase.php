@@ -25,9 +25,19 @@ class AlgorithmBase{
 		return $this->description;
 	}
 
-	public function setResult($result, $type){
-		$this->result = $result;
-		$this->resultType = $type;
+	// only accepts numbers and strings
+	public function setResult($result){
+		if (!is_array($result))
+			$this->result = array('result' => $result);
+		else{
+			foreach($result as $key => $val){
+				if ( is_int($val) || ((string)(int)$val) === $val || is_string($val)){
+					$this->result[$key] = $val;
+				}elseif ((is_object($val)) && ($val instanceof 'Grafo')){
+					$this->result[$key] = $val->save();
+				}
+			}
+		}
 	}
 
 	public function getResult(){

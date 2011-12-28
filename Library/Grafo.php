@@ -2,8 +2,7 @@
 
 /**
  * 
- * "id":"G",
- * "tipo":"grafo",
+ * "id":"123123",
  * "vertices":{
  *	"quantidade":3,
  *	"vertice":[
@@ -65,7 +64,6 @@ class Arestas{
 
 class Grafo{
 	public $id;
-	public $tipo;
 	public $vertices;
 	public $arestas;
 	
@@ -79,7 +77,6 @@ class Grafo{
 	// PRECISA ID?
 	// PRECISA QUANTIDADE?
 	public function loadFromArray($array){
-		$this->tipo = $array['tipo'];
 		$this->id = $array['id'];
 		
 		$vertices = $array['vertices'];
@@ -115,5 +112,20 @@ class Grafo{
 	
 	public function getArestas(){
 		return $this->arestas;
+	}
+
+	public function save(){
+		do{
+			$graphId = sprintf("%06d", rand(1, 1000000));
+		}while(is_file(GRAPH_DATA_DIR.'/'.$graphId.'.json'));
+
+		$jsonFile = fopen(GRAPH_DATA_DIR.'/'.$graphId.'.json', 'w');
+		if (!$jsonFile){
+			return -1;
+		}
+		$graphJson = json_encode($graph);
+		fprintf($jsonFile, "%s\n", $graphJson);
+
+		return $graphId;
 	}
 }
