@@ -18,9 +18,13 @@ class Algorithm{
 	private $_algObject;
 	private $_resultId;
 
+	private $_algorithmFile;
+
 	private $_result = array();
 
 	function __construct($data){
+		$this->_algorithmFile = ALGORITHM_DIR.'/'.ucfirst($this->_algorithm).'.php';
+
 		$this->setFormat($data['format']);
 		$this->setAlgorithm($data['algorithm']);
 
@@ -32,8 +36,13 @@ class Algorithm{
 	}
 
 	function Get(){
+		if (!is_file($this->_algorithmFile)){
+			$this->_response = array('error' => 'Algorithm '.$this->_algorithm.' not found.');
+			return;
+		}
+
 		require ALGORITHM_DIR.'/'.'AlgorithmBase'.'.php';
-		require ALGORITHM_DIR.'/'.ucfirst($this->_algorithm).'.php';
+		require $this->_algorithmFile;
 
 		$this->_algObject = new $this->_algorithm;
 
@@ -47,9 +56,14 @@ class Algorithm{
 	}
 	
 	function Post(){
+		if (!is_file($this->_algorithmFile)){
+			$this->_response = array('error' => 'Algorithm '.$this->_algorithm.' not found.');
+			return;
+		}
+
 		require 'GraphBase.php';
 		require ALGORITHM_DIR.'/'.'AlgorithmBase'.'.php';
-		require ALGORITHM_DIR.'/'.ucfirst($this->_algorithm).'.php';
+		require $this->_algorithmFile;
 
 		$graphsData = array();
 

@@ -64,7 +64,7 @@ class RestService{
 	}
 	
 	public function parseUrl(){
-		$resourcePattern = '/\/([a-z0-9]+)[\.\/]/';
+		$resourcePattern = '/\/([a-z][a-z0-9_]+)[\.\/]/';
 		if (!preg_match($resourcePattern, $this->_url, $resMatches)){
 			$this->_error = 'You must especify a resource.';
 			return false;
@@ -116,7 +116,7 @@ class RestService{
 				break;
 			default:
 				$this->_requestResource = 'Algorithm';
-				$algPattern = '/\/([a-z0-9]+)\.(xml|json)/';
+				$algPattern = '/\/([a-z][a-z0-9_]+)\.(xml|json)/';
 				
 				if (preg_match($algPattern, $this->_url, $algMatches)){
 					list(, $this->_input['algorithm'], $this->_input['format']) = $algMatches;
