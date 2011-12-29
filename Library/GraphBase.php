@@ -160,7 +160,7 @@ class GraphBase{
 		}
 	}
 
-	public function createVertex($id, $data = NULL){
+	public function createVertex($v, $data = NULL){
 		if ($data){
 			if (!is_array($data)){
 				$data = array("data" => $data);
@@ -168,21 +168,21 @@ class GraphBase{
 		}else{
 			$data = array("index" => count($this->vertexes));
 		}
-		$this->vertexes[$id] = $data;
+		$this->vertexes[$v] = $data;
 	}
 
-	public function deleteVertex($id){
-		if (!isset($this->vertexes[$id]))
+	public function deleteVertex($v){
+		if (!isset($this->vertexes[$v]))
 			return;
 
-		unset($this->vertexes[$id]);
-		foreach(array_keys($this->adjacency[$id]) as $v){
-			unset($this->adjacency[$v][$id]);
-			if (!count($this->adjacency[$v])){
-				unset($this->adjacency[$v]);
+		unset($this->vertexes[$v]);
+		foreach(array_keys($this->adjacency[$v]) as $u){
+			unset($this->adjacency[$u][$v]);
+			if (!count($this->adjacency[$u])){
+				unset($this->adjacency[$u]);
 			}
 		}
-		unset($this->adjacency[$id]);
+		unset($this->adjacency[$v]);
 	}
 
 	public function createEdge($u, $v, $data = NULL){
