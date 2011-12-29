@@ -185,8 +185,8 @@ class GraphBase{
 		unset($this->adjacency[$id]);
 	}
 
-	public function createEdge($fromNode, $toNode, $data = NULL){
-		if(!isset($this->vertexes[$fromNode]) || !isset($this->vertexes[$toNode]) || isset($this->adjacency[$fromNode][$toNode]))
+	public function createEdge($u, $v, $data = NULL){
+		if(!isset($this->vertexes[$u]) || !isset($this->vertexes[$v]) || isset($this->adjacency[$u][$v]))
 			return;
 
 		if ($data){
@@ -197,19 +197,19 @@ class GraphBase{
 			$data = array("weight" => 0);
 		}
 
-		$this->adjacency[$fromNode][$toNode] = $data;
-		$this->adjacency[$toNode][$fromNode] = $data;
+		$this->adjacency[$u][$v] = $data;
+		$this->adjacency[$v][$u] = $data;
 	}
 
-	public function deleteEdge($fromNode, $toNode){
-		unset($this->adjacency[$fromNode][$toNode]);
-		if (!count($this->adjacency[$fromNode])){
-			unset($this->adjacency[$fromNode]);
+	public function deleteEdge($u, $v){
+		unset($this->adjacency[$u][$v]);
+		if (!count($this->adjacency[$u])){
+			unset($this->adjacency[$u]);
 		}
 
-		unset($this->adjacency[$toNode][$fromNode]);
-		if (!count($this->adjacency[$toNode])){
-			unset($this->adjacency[$toNode]);
+		unset($this->adjacency[$v][$u]);
+		if (!count($this->adjacency[$v])){
+			unset($this->adjacency[$v]);
 		}
 	}
 
