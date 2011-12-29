@@ -135,7 +135,7 @@ class GraphBase{
 		}
 	}
 
-	public function loadFromArray($array){
+	private function loadFromArray($array){
 		if (isset($array['id']))
 			$this->id = $array['id'];
 
@@ -159,18 +159,58 @@ class GraphBase{
 			}
 		}
 	}
-	
-	public function getVertices(){
-		return $this->vertices;
+
+	public function createVertex($id, $data = NULL){
+		if ($data){
+			if (!is_array($data)){
+				$data = array("data" => $data);
+			}
+		}else{
+			$data = array("index" => count($this->vertexes));
+		}
+		$this->vertexes[$id] = $data;
 	}
-	
-	public function setArestas($listaArestas){
-		$this->arestas = new Arestas;
-		$this->arestas->setArestas($listaArestas);
+
+	public function deleteVertex($id){
+		if (!isset($this->vertexes[$id]))
+			return;
+
+		unset($this->vertexes[$id]);
+		foreach(array_keys($this->adjacency[$id]) as $v){
+			unset($this->adjacency[$v][$id]);
+			if (!count($this->adjacency[$v])){
+				unset($this->adjacency[$v]);
+			}
+		}
+		unset($this->adjacency[$id]);
 	}
-	
-	public function getArestas(){
-		return $this->arestas;
+
+	public function createEdge($fromNode, $toNode, $data = NULL){
+		if(!isset($this->vertexes[$fromNode]) || !isset($this->vertexes[$toNode]) || isset($this->adjacency[$fromNode][$toNode]))
+			return;
+
+		if ($data){
+			if (!is_array($data)){
+				$data = array("weight" => $data);
+			}
+		}else{
+			$data = array("weight" => 0);
+		}
+
+		$this->adjacency[$fromNode][$toNode] = $data;
+		$this->adjacency[$toNode][$fromNode] = $data;
+	}
+
+	public function deleteEdge($fromNode, $toNode){
+		unset($this->adjacency[$fromNode][$toNode]);
+		if (!count($this->adjacency[$fromNode])){
+			unset($this->adjacency[$fromNode]);
+		}
+
+		unset($this->adjacency[$toNode][$fromNode]);
+		if (!count($this->adjacency[$toNode])){
+			unset($this->adjacency[$toNode]);
+		}
 	}
 
 	public function setId($id){

@@ -23,12 +23,27 @@ class Algorithm{
 	function __construct($data){
 		$this->setFormat($data['format']);
 		$this->setAlgorithm($data['algorithm']);
-		$this->setGraphsId($data['graph']);
-		$this->setParams($data['param']);
+
+		if (isset($data['graph']))
+			$this->setGraphsId($data['graph']);
+
+		if (isset($data['param']))
+			$this->setParams($data['param']);
 	}
 
 	function Get(){
-		# RODAR <ALG>->Info();
+		require ALGORITHM_DIR.'/'.'AlgorithmBase'.'.php';
+		require ALGORITHM_DIR.'/'.ucfirst($this->_algorithm).'.php';
+
+		$this->_algObject = new $this->_algorithm;
+
+		$this->_algObject->Info();
+		$this->_response = array(
+			"title" => $this->_algObject->getTitle(),
+			"description" => $this->_algObject->getDescription(),
+			"input" => $this->_algObject->getInputInfo(),
+			"result" => $this->_algObject->getResultInfo()
+		);
 	}
 	
 	function Post(){
@@ -49,10 +64,12 @@ class Algorithm{
 		$this->_algObject->Run();
 		
 		$this->_saveResult();
+
+		$this->_response = array('resultId' => $this->_result['id']);
 	}
 	
 	function Response(){
-		return array('resultId' => $this->_result['id']);
+		return $this->_response;
 	}
 
 	function setFormat($f){
@@ -84,13 +101,8 @@ class Algorithm{
 		$this->_result['parameter'] = $this->_params;
 		$this->_result['result'] = $this->_algObject->getResult();
 		
-		
 //		$this->result2xml();
 		$this->result2json();
-	}
-	
-	private function result2xml(){
-		fprintf($xmlFile, "%s\n", $xml);
 	}
 	
 	private function result2json(){

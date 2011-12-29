@@ -116,20 +116,18 @@ class RestService{
 				break;
 			default:
 				$this->_requestResource = 'Algorithm';
-				if ($this->_requestMethod == 'POST'){
-					$algPattern = '/\/([a-z0-9]+)\.(xml|json)/';
-					preg_match($algPattern, $this->_url, $algMatches);
-					if (count($algMatches) == 3){
-						list(, $this->_algorithm, $this->_format) = $algMatches;
-						list(, $this->_input['algorithm'], $this->_input['format']) = $algMatches; 
-
+				$algPattern = '/\/([a-z0-9]+)\.(xml|json)/';
+				
+				if (preg_match($algPattern, $this->_url, $algMatches)){
+					list(, $this->_input['algorithm'], $this->_input['format']) = $algMatches;
+					if ($this->_requestMethod == 'POST'){
 						$this->_getList('graph');
 						$this->_getList('param');
-					}else{
-						$this->_error = 'Impossible to determine algorithm or format requested.';
+					}elseif ($this->_requestMethod != 'GET'){
+						$this->_error = 'Invalid request for ALGORITHM resource.';
 					}
 				}else{
-					$this->_error = 'Invalid request for ALGORITHM resource.';
+					$this->_error = 'Impossible to determine algorithm or format requested.';
 				}
 		}
 		
@@ -197,6 +195,7 @@ class RestService{
 					echo 'XML';
 					break;
 				case 'json':
+				default:
 					$response = json_encode($response);
 			}
 		}
