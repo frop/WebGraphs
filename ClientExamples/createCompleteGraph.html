@@ -1,6 +1,6 @@
 <form>
 	K <input type='text' name='param[k]' id='k'><br>
-	<input type='submit' id='submit'>
+	<input type='button' id='submit' value='Criar'>
 </form>
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
@@ -13,10 +13,9 @@ $(document).ready(function(){
 			type: 'post',
 			data: "param[k]="+$("#k").val(),
 			success: function(json){
-				alert('=)');
-/*				$.getJSON("http://localhost/result/"+json.resultId+".json", function (data){
-					console.log(data);
-				});*/
+				$.getJSON("http://localhost/result/"+json.resultId+".json", function (data){
+					$('<a>', {href:'http://localhost/graph/'+data.result.result+'.json', text:'Graph'}).appendTo('body');
+				});
 			}
 		});
 	});
