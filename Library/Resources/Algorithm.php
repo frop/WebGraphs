@@ -77,9 +77,10 @@ class Algorithm{
 		$this->_algObject->setParamsList($this->_params);
 		$this->_algObject->Run();
 		
-		$this->_saveResult();
-
-		$this->_response = array('resultId' => $this->_result['id']);
+		if ($this->_saveResult())
+			$this->_response = array('resultId' => $this->_result['id']);
+		else
+			$this->_response = array('error' => 'Error while saving result.');
 	}
 	
 	function Response(){
@@ -118,16 +119,19 @@ class Algorithm{
 		$this->_result['graph'] = $this->_graphsId;
 		$this->_result['parameter'] = $this->_params;
 		$this->_result['result'] = $this->_algObject->getResult();
-		
-//		$this->result2xml();
-		$this->result2json();
+
+		return $this->result2json();
 	}
 	
 	private function result2json(){
 		$jsonFile = fopen(RESULT_DATA_DIR .'/'. $this->_result['id'] . ".json", "w");
-		$json = json_encode($this->_result);
+		if ($jsonFile){
+			$json = json_encode($this->_result);
 		
-		fprintf($jsonFile, "%s\n", $json);
+			fprintf($jsonFile, "%s\n", $json);
+		}
+		
+		return $jsonFile != NULL;
 	}
 
 	private function createResultId(){
