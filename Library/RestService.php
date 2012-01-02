@@ -5,9 +5,7 @@ class RestService{
 	private $_arg;
 	
 	private $_requestResource;
-	
-	private $_className;
-	private $_classObj;
+
 	private $_input;
 	private $_resObj;
 	
@@ -30,37 +28,6 @@ class RestService{
 		parse_str(file_get_contents('php://input'), $this->_arg['DELETE']);
 		
 		$this->parseUrl();
-	}
-	
-	public function getUrl(){
-		return $this->_url;
-	}
-	
-	public function getRequestMethod(){
-		return $this->_requestMethod;
-	}
-	
-	public function getArg($metodo = NULL){
-		if($metodo){
-			return $this->_arg[$metodo];
-		}
-		return $this->_arg;
-	}
-	
-	public function setClassObj($classObj){
-		$this->_classObj = $classObj;
-	}
-	
-	public function getClassObj(){
-		return $this->_classObj;
-	}
-	
-	public function setClassName($className){
-		$this->_className = $className;
-	}
-	
-	public function getClassName(){
-		return $this->_className;
 	}
 	
 	public function parseUrl(){
