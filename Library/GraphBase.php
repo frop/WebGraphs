@@ -3,41 +3,32 @@
 /**
 {
   "vertexes": {
-    "g1": {"color": "red"}, 
-    "g2": {"color": "blue"}, 
-    "g3": {"color": "green"}
+    "v1": {"color": "red"}, 
+    "v2": {"color": "blue"}, 
+    "v3": {"color": "green"}
   },
   "adjacency": {
-    "g1": {
-	"g2": {"weight": 0},
-	"g3": {"weight": 0}
+    "v1": {
+	"v2": {"weight": 0},
+	"v3": {"weight": 0}
     }, 
-    "g2": {
-	"g1": {"weight": 0},
-	"g3": {"weight": 0}
+    "v2": {
+	"v1": {"weight": 0},
+	"v3": {"weight": 0}
     }, 
-    "g3": {
-	"g1": {"weight": 0}, 
-	"g2": {"weight": 0}
+    "v3": {
+	"v1": {"weight": 0}, 
+	"v2": {"weight": 0}
     }
   }
 }
 
 {
-  "vertexes": ["g1", "g2", "g3"],
+  "vertexes": ["v1", "v2", "v3"],
   "adjacency": {
-    "g1": {
-	"g2": {"weight": 0},
-	"g3": {"weight": 0}
-    }, 
-    "g2": {
-	"g1": {"weight": 0},
-	"g3": {"weight": 0}
-    }, 
-    "g3": {
-	"g1": {"weight": 0}, 
-	"g2": {"weight": 0}
-    }
+    "v1": ["v2", "v3"], 
+    "v2": ["v1", "v3"],
+    "v3": ["v1", "v2"]
   }
 }
 */
@@ -49,17 +40,17 @@ Array
     [id] => 123123
     [vertexes] => Array
         (
-            [g1] => Array
+            [v1] => Array
                 (
                     [color] => red
                 )
 
-            [g2] => Array
+            [v2] => Array
                 (
                     [color] => blue
                 )
 
-            [g3] => Array
+            [v3] => Array
                 (
                     [color] => green
                 )
@@ -68,15 +59,15 @@ Array
 
     [adjacency] => Array
         (
-            [g1] => Array
+            [v1] => Array
                 (
-                    [0] => g2
-                    [1] => g3
+                    [0] => v2
+                    [1] => v3
                 )
 
-            [g2] => Array
+            [v2] => Array
                 (
-                    [g1] => Array
+                    [v1] => Array
                         (
                             [data] => Array
                                 (
@@ -85,7 +76,7 @@ Array
 
                         )
 
-                    [g3] => Array
+                    [v3] => Array
                         (
                             [data] => Array
                                 (
@@ -96,9 +87,9 @@ Array
 
                 )
 
-            [g3] => Array
+            [v3] => Array
                 (
-                    [g1] => Array
+                    [v1] => Array
                         (
                             [data] => Array
                                 (
@@ -107,7 +98,7 @@ Array
 
                         )
 
-                    [g2] => Array
+                    [v2] => Array
                         (
                             [data] => Array
                                 (
