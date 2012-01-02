@@ -23,8 +23,6 @@ class Algorithm{
 	private $_result = array();
 
 	function __construct($data){
-		$this->_algorithmFile = ALGORITHM_DIR.'/'.ucfirst($this->_algorithm).'.php';
-
 		$this->setFormat($data['format']);
 		$this->setAlgorithm($data['algorithm']);
 
@@ -67,8 +65,10 @@ class Algorithm{
 
 		$graphsData = array();
 
-		foreach($this->_graphsId as $key => $gId){
-			$graphsData[$key] = new GraphBase(json_decode(file_get_contents(GRAPH_DATA_DIR .'/'. "$gId.json"), TRUE));
+		if (count($this->_graphsId > 0)){
+			foreach($this->_graphsId as $key => $gId){
+				$graphsData[$key] = new GraphBase(json_decode(file_get_contents(GRAPH_DATA_DIR .'/'. "$gId.json"), TRUE));
+			}
 		}
 		
 		$this->_algObject = new $this->_algorithm;
@@ -92,14 +92,18 @@ class Algorithm{
 	
 	function setAlgorithm($a){
 		$this->_algorithm = $a;
+		$this->_algorithmFile = ALGORITHM_DIR.'/'.ucfirst($a).'.php';
 	}
 	
 	function setGraphsId($g){
-		if (is_array($g)){
-			$this->_graphsId = $g;
-		}else{
-			$this->_graphsId = array();
-			$this->_graphsId[0] = $g;
+		$this->_graphsId = array();
+		
+		if($g){
+			if (is_array($g)){
+				$this->_graphsId = $g;
+			}else{
+				$this->_graphsId['graph'] = $g;
+			}
 		}
 	}
 	
