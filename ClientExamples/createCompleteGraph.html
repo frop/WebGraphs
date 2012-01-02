@@ -1,0 +1,25 @@
+<form>
+	K <input type='text' name='param[k]' id='k'><br>
+	<input type='submit' id='submit'>
+</form>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#submit").click(function(){
+		$.ajax({
+			url: "http://localhost/complete_graph.json",
+			dataType: 'json',
+			type: 'post',
+			data: "param[k]="+$("#k").val(),
+			success: function(json){
+				alert('=)');
+/*				$.getJSON("http://localhost/result/"+json.resultId+".json", function (data){
+					console.log(data);
+				});*/
+			}
+		});
+	});
+});
+</script>
+
