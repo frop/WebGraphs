@@ -223,7 +223,7 @@ class GraphBase{
 		if (!$jsonFile){
 			return 0;
 		}
-		$graphJson = json_encode($this);
+		$graphJson = json_encode($this, JSON_FORCE_OBJECT);
 		fprintf($jsonFile, "%s\n", $graphJson);
 
 		return $this->id;
