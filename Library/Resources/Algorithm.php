@@ -115,7 +115,7 @@ class Algorithm{
 	
 	private function _saveResult(){
 		$this->createResultId();
-		$this->_result['algorithm']['name'] = $this->_algorithm;
+		$this->_result['algorithm']['id'] = $this->_algorithm;
 		$this->_result['algorithm']['description'] = $this->_algObject->getDescription();
 		$this->_result['graph'] = $this->_graphsId;
 		$this->_result['parameter'] = $this->_params;
