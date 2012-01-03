@@ -46,6 +46,7 @@ class Algorithm{
 
 		$this->_algObject->Info();
 		$this->_response = array(
+			"id" => $this->_algorithm,
 			"title" => $this->_algObject->getTitle(),
 			"description" => $this->_algObject->getDescription(),
 			"input" => $this->_algObject->getInputInfo(),
