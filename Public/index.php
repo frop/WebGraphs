@@ -22,7 +22,12 @@ $servico->handle();
 $servico->SendResponse(TRUE);
 
 /**
-LIBRARY_DIR: caminho absoluto do diretório que contém a biblioteca do sistema.
+LIBRARY_DIR: caminho absoluto do diretório que contém a biblioteca do sistema, além dos arquivos das classes de algoritmos (LIBRARY_DIR/Algorithms).
 DATA_DIR: caminho absoluto do diretório que contém os arquivos de grafo (DATA_DIR/Graphs) e de resultado (DATA_DIR/Results).
+
+Ainda existem outras constantes, mas estas não precisam ser modificadas:
+ALGORITHM_DIR: diretório onde ficam as classes dos algoritmos desenvolvidos.
+GRAPH_DATA_DIR: diretório que contém os arquivos de grafo.
+RESULT_DATA_DIR: diretório que contém os arquivos de resultado.
 */
 
