@@ -7,21 +7,21 @@ function salvarResultado
 if grafo: grafoResultID = grafo->create, this->result = grafoResultID (vetor)
 */
 class AlgorithmBase{
-	public $id;
+	private $id;
 
 	// COLOCAR EXEMPLO EM TUDO
 	
 	// Título do algoritmo
-	public $title;
+	private $title;
 	
 	// Descrição breve do algoritmo. Além de ser usado na página de informação, é exibido no arquivo de resultado.
-	public $description;
+	private $description;
 	
 	// Vetor associativo com informações sobre cada dado de entrada do algoritmo. É indexado pelo nome do dado, que pode ser um grafo ou um parâmetro.
-	public $inputInfo;
+	private $inputInfo;
 	
 	// Semelhante ao vetor de entrada, descreve a saída gerada pelo algoritmo.
-	public $resultInfo;
+	private $resultInfo;
 
 	// Vetor associativo que armazena os parâmetros de entrada. É indexado pelos nomes dos dados.
 	public $param;
