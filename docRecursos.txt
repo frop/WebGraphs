@@ -49,7 +49,7 @@ URI - Método
 JSON do resultado correspondente ao identificador <id>
 	id: identificador único do resultado de uma determinada execução.
 	algorithm: lista de informações sobre o algoritmo executado. Contém:
-		-name: nome do algoritmo. É o mesmo dado utilizado para formar sua respectiva URI
+		-id: identificador do algoritmo.
 		-description: breve descrição provida pelo desenvolvedor do algoritmo.
 	parameter: lista de parâmetros passados para a execução.
 	graph: lista com os identificadores dos grafos utilizados pelo algoritmo.
