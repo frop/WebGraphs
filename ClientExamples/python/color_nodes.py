@@ -7,7 +7,13 @@ from lib import *
 
 #> python color_nodes.py 000000
 
-G = json_to_nx(load_json_graph(sys.argv[1]))
+graph_json = load_json_graph(sys.argv[1])
+
+if (graph_json['error']):
+	print graph_json['error']
+	exit();
+	
+G = json_to_nx(graph_json)
 
 pos=nx.spring_layout(G) # positions for all nodes
 
