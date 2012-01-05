@@ -7,18 +7,17 @@ from lib import *
 
 #> python color_nodes.py 000000
 
-graph_json = load_json_graph(sys.argv[1])
-
-if (graph_json['error']):
-	print graph_json['error']
-	exit();
-	
-G = json_to_nx(graph_json)
+G = json_to_nx(load_json_graph(sys.argv[1]))
 
 pos=nx.spring_layout(G) # positions for all nodes
 
+colors = []
+
+for v in G.nodes(data=True):
+	colors.append(v[1]['color'])
+
 # nodes
-nx.draw_networkx_nodes(G,pos,node_size=200)
+nx.draw_networkx_nodes(G,pos,node_size=200, node_color=colors)
 
 # edges
 nx.draw_networkx_edges(G,pos)
