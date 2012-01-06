@@ -9,7 +9,7 @@ from lib import *
 
 graph_json = load_json_graph(sys.argv[1])
 
-if (graph_json['error']):
+if 'error' in graph_json:
 	print graph_json['error']
 	exit();
 	
