@@ -3,7 +3,7 @@ import simplejson
 from networkx import *
 
 def load_json_graph(graph_id):
-	req = urllib2.Request("http://localhost/graph/"+graph_id+".json")
+	req = urllib2.Request("http://www.rig.com/graph/"+graph_id+".json")
 	opener = urllib2.build_opener()
 	f = opener.open(req)
 

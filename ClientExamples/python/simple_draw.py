@@ -18,7 +18,7 @@ G = json_to_nx(graph_json)
 pos=nx.spring_layout(G) # positions for all nodes
 
 # nodes
-nx.draw_networkx_nodes(G,pos,node_size=200)
+nx.draw_networkx_nodes(G,pos,node_size=10)
 
 # edges
 nx.draw_networkx_edges(G,pos)
@@ -26,7 +26,10 @@ nx.draw_networkx_edges(G,pos)
 # labels
 nx.draw_networkx_labels(G,pos,font_size=10,font_family='sans-serif')
 
-plt.axis('off')
+#plt.axis('off')
 #plt.savefig("weighted_graph.png") # save as png
-plt.show() # display
+#plt.show() # display
 
+A=to_agraph(G)        # convert to a graphviz graph
+A.layout(prog='circo')
+A.draw("graph.png")   # write
