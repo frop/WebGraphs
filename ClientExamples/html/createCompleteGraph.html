@@ -8,13 +8,13 @@
 $(document).ready(function(){
 	$("#submit").click(function(){
 		$.ajax({
-			url: "http://localhost/complete_graph.json",
+			url: "http://www.tg-webgraphs.com/complete_graph.json",
 			dataType: 'json',
 			type: 'post',
 			data: "param[k]="+$("#k").val(),
 			success: function(json){
-				$.getJSON("http://localhost/result/"+json.resultId+".json", function (data){
-					$('<a>', {href:'http://localhost/graph/'+data.result.result+'.json', text:'Graph'}).appendTo('body');
+				$.getJSON("http://www.tg-webgraphs.com/result/"+json.resultId+".json", function (data){
+					$('<a>', {href:'http://www.tg-webgraphs.com/graph/'+data.result.result+'.json', text:'Graph'}).appendTo('body');
 				});
 			}
 		});

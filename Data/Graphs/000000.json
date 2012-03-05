@@ -2,7 +2,7 @@
   "adjacency": {
     "0": {
       "0": {
-        "weight": 0
+        "label": "e1"
       }, 
       "1": {
         "weight": 0

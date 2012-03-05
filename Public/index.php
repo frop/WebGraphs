@@ -19,7 +19,7 @@ $servico = new RestService();
 
 $servico->handle();
 
-$servico->SendResponse(TRUE);
+$servico->SendResponse();
 
 /**
 LIBRARY_DIR: caminho absoluto do diretório que contém a biblioteca do sistema, além dos arquivos das classes de algoritmos (LIBRARY_DIR/Algorithms).
